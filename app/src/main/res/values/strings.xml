@@ -1,4 +1,17 @@
 <resources>
+
     <string name="app_name">Flashlight</string>
-    <string name="tile_label">Flashlight</string>
+    <string name="toggle_flashlight">Toggle Flashlight</string>
+    <string name="set_tile_name">Set tile name</string>
+    <string name="enter_new_tile_name">Enter new tile name</string>
+
+    <string name="contributor_names">
+        Contributors (xda usernames):
+        \nUmang96
+        \nShayanism
+        \nhichaam
+        \nGameTheory.
+        \n\nYou may use this as a normal flashlight app or you can also use it as a tile in android quicksettings toggles. This app needs root permission to work.
+    </string>
+
 </resources>

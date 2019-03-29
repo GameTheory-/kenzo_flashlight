@@ -3,75 +3,43 @@ package com.umang96.flashlight;
 import android.content.Context;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import com.jaredrummler.android.shell.CommandResult;
+import com.jaredrummler.android.shell.Shell;
 
 
-public class TorchUtils {
+class TorchUtils {
 
-    private static void flash_on(Context context){
-        String[] c1 = {"echo 100 > ~/sys/class/leds/led:torch_0/brightness","echo 100 > ~/sys/class/leds/led:torch_1/brightness"};
-        RunAsRoot(c1, context);
+    static boolean check(Context context) {
+        boolean isRoot = Shell.SU.available();
+        boolean onOff = false;
+        if (isRoot) {
+            CommandResult result = Shell.SU.run("cat /sys/class/leds/led:torch_0/brightness");
+            if (result.getStdout().length() > 1) {
+                flash_off();
+            } else {
+                flash_on();
+                onOff = true;
+            }
+        } else {
+            Toast.makeText(context, "Root was not detected!", Toast.LENGTH_LONG).show();
+        }
+        return onOff;
     }
 
-    private static void flash_off(Context context){
-        String[] c1 = {"echo 0 > ~/sys/class/leds/led:torch_0/brightness","echo 0 > ~/sys/class/leds/led:torch_1/brightness"};
-        RunAsRoot(c1, context);
+    private static void flash_on() {
+        String[] cmds = {
+                "echo 100 > /sys/class/leds/led:torch_0/brightness",
+                "echo 100 > /sys/class/leds/led:torch_1/brightness"
+        };
+        RootShell.exec(cmds);
     }
 
-    public static boolean check(Context context){
-        String outp = Executor("cat ~/sys/class/leds/led:torch_0/brightness");
-            try {
-            if (outp.length()==1) {
-                    flash_on(context);
-                return true;
-            }
-            if (!(outp.length()==1)) {
-                flash_off(context);
-            }
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(context, "Error, have you granted root ?",
-                    Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
-    public static String Executor(String command) {
-        StringBuffer output = new StringBuffer();
-        Process p=null;
-        try {
-            p = Runtime.getRuntime().exec(new String[] { "su", "-c", command });
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = "";
-            while ((line = reader.readLine())!= null) {
-                output.append(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String response = output.toString();
-        return response;
-
-    }
-
-    public static void RunAsRoot(String[] cmds, Context context){
-        try{
-            Process p = Runtime.getRuntime().exec("su");
-            DataOutputStream os = new DataOutputStream(p.getOutputStream());
-            for (String tmpCmd : cmds) {
-                os.writeBytes(tmpCmd+"\n");
-            }
-            os.writeBytes("exit\n");
-            os.flush();
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(context, "RunAsRoot failed !",
-                    Toast.LENGTH_SHORT).show();
-        }
+    private static void flash_off() {
+        String[] cmds = {
+                "echo 0 > /sys/class/leds/led:torch_0/brightness",
+                "echo 0 > /sys/class/leds/led:torch_1/brightness"
+        };
+        RootShell.exec(cmds);
     }
 
 }
