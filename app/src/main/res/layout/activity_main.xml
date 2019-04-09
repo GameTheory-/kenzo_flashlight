@@ -1,55 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="16dp"
     tools:context="com.umang96.flashlight.MainActivity">
 
     <Button
-        android:text="@string/toggle_flashlight"
+        android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:id="@+id/button1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:text="@string/set_tile_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:id="@+id/button2"
-        android:layout_below="@+id/editText1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:text="@string/contributor_names"
-        android:textSize="13sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_below="@+id/button2"
-        android:layout_marginTop="12dp"
-        android:layout_alignParentStart="true" />
+        android:text="@string/toggle_flashlight" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_new_tile_name"
-        android:layout_marginTop="14dp"
-        android:maxLength="20"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:id="@+id/editText1"
-        android:layout_below="@+id/button1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="@string/enter_new_tile_name"
+        android:inputType="text"
+        android:maxLength="20"
         tools:ignore="Autofill" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/set_tile_name" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/contributor_names" />
+
+</LinearLayout>

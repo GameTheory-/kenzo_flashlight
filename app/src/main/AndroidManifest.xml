@@ -21,7 +21,6 @@
         <service
             android:name=".TorchTileService"
             android:icon="@drawable/ic_torch_off"
-
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

@@ -10,54 +10,57 @@ public class TorchTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
-        updateTile(2);
+        TorchUtils.checkState(this);
+        updateTile();
     }
 
     @Override
     public void onTileAdded() {
         super.onTileAdded();
-        updateTile(1);
+        updateTile();
+    }
+
+    @Override
+    public void onTileRemoved() {
+        super.onTileRemoved();
     }
 
     @Override
     public void onStartListening() {
         super.onStartListening();
-        updateTile(1);
+        updateTile();
     }
 
-    private void updateTile(int x) {
-        boolean isActive = false;
+    @Override
+    public void onStopListening() {
+        super.onStopListening();
+    }
 
-        if (x == 2) {
-            isActive = TorchUtils.check(this);
-        }
+    private void updateTile() {
+        SharedPreferences prefs = getSharedPreferences("tile_preferences", MODE_PRIVATE);
+        boolean isActive = prefs.getBoolean("tile_state", false);
 
         Tile tile = getQsTile();
         Icon newIcon;
-        int newState = Tile.STATE_ACTIVE;
+        int newState;
 
         if (isActive) {
-            newIcon = Icon.createWithResource(getApplicationContext(), R.drawable.ic_torch_on);
+            newIcon = Icon.createWithResource(this, R.drawable.ic_torch_on);
+            newState = Tile.STATE_ACTIVE;
         } else {
-            newIcon = Icon.createWithResource(getApplicationContext(), R.drawable.ic_torch_off);
+            newIcon = Icon.createWithResource(this, R.drawable.ic_torch_off);
+            newState = Tile.STATE_INACTIVE;
         }
 
         tile.setLabel(getTileName());
-        if (x == 2) {
-            tile.setIcon(newIcon);
-        }
+        tile.setIcon(newIcon);
         tile.setState(newState);
         tile.updateTile();
     }
 
     private String getTileName() {
         SharedPreferences prefs = getSharedPreferences("tile_preferences", MODE_PRIVATE);
-        String restoredText = prefs.getString("tile_name", null);
-        String temp="Flashlight";
-        if (restoredText != null) {
-            temp = prefs.getString("tile_name", "Flashlight");
-        }
-        return temp;
+        return prefs.getString("tile_name", "Flashlight");
     }
 
 }
