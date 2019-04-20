@@ -1,17 +1,29 @@
 package com.umang96.flashlight;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Icon;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
+import android.widget.Toast;
+
+import com.umang96.flashlight.widget.WidgetButtonService;
 
 public class TorchTileService extends TileService {
 
     @Override
     public void onClick() {
         super.onClick();
-        TorchUtils.checkState(this);
-        updateTile();
+        boolean hasCameraFlash = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        if (hasCameraFlash) {
+            TorchUtils.checkState(this);
+            Intent intent = new Intent(this, WidgetButtonService.class);
+            startService(intent);
+            updateTile();
+        } else {
+            Toast.makeText(this, "Flash not available on your device!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

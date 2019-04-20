@@ -1,5 +1,7 @@
 package com.umang96.flashlight;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -8,10 +10,12 @@ import android.content.SharedPreferences;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.umang96.flashlight.widget.WidgetService;
+
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private String tile_label;
-    EditText et1;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,30 +24,36 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("tile_preferences", MODE_PRIVATE);
 
-        addButtonClickListener1();
-        addButtonClickListener2();
+        torchButton();
+        tileLabelButton();
 
-        et1 = findViewById(R.id.editText1);
+        editText = findViewById(R.id.edit_text);
 
         pref_load();
     }
 
-    private void addButtonClickListener1() {
-        Button b1 = findViewById(R.id.button1);
+    private void torchButton() {
+        Button b1 = findViewById(R.id.torch_button);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TorchUtils.checkState(getApplicationContext());
+                boolean hasCameraFlash = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+                if (hasCameraFlash) {
+                    Intent intent = new Intent(getApplicationContext(), WidgetService.class);
+                    startService(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Flash not available on your device!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
-    private void addButtonClickListener2() {
-        Button b1 = findViewById(R.id.button2);
+    private void tileLabelButton() {
+        Button b1 = findViewById(R.id.tile_label_button);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              tile_label = et1.getText().toString();
+              tile_label = editText.getText().toString();
               pref_edit(tile_label);
             }
         });
@@ -60,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         String restoredText = prefs.getString("tile_name", null);
         if (restoredText != null) {
             String temp = prefs.getString("tile_name", "Flashlight");
-            et1.setText(temp);
+            editText.setText(temp);
         }
     }
 

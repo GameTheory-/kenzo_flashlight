@@ -9,13 +9,13 @@
     tools:context="com.umang96.flashlight.MainActivity">
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/torch_button"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:text="@string/toggle_flashlight" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -26,7 +26,7 @@
         tools:ignore="Autofill" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/tile_label_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="12dp"

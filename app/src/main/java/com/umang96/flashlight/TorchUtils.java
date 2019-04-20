@@ -10,9 +10,9 @@ import com.jaredrummler.android.shell.Shell;
 import static android.content.Context.MODE_PRIVATE;
 
 
-class TorchUtils {
+public class TorchUtils {
 
-    static void checkState(Context context) {
+    public static void checkState(Context context) {
         boolean isRoot = Shell.SU.available();
         if (isRoot) {
             CommandResult result = Shell.SU.run("cat /sys/class/leds/led:torch_0/brightness");
