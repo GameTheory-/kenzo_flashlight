@@ -20,6 +20,10 @@ For android 7+
 - hichaam
 - GameTheory.
 
+## Latest download
+
+<https://github.com/GameTheory-/kenzo_flashlight/releases>
+
 ## Other Projects
 
 - <https://intechgeek.com/>
