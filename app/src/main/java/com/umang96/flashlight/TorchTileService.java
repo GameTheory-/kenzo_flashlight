@@ -1,6 +1,5 @@
 package com.umang96.flashlight;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Icon;
@@ -8,7 +7,6 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
 
-import com.umang96.flashlight.widget.WidgetButtonService;
 
 public class TorchTileService extends TileService {
 
@@ -17,9 +15,7 @@ public class TorchTileService extends TileService {
         super.onClick();
         boolean hasCameraFlash = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         if (hasCameraFlash) {
-            TorchUtils.checkState(this);
-            Intent intent = new Intent(this, WidgetButtonService.class);
-            startService(intent);
+            TorchUtils.toggleTorch(this);
             updateTile();
         } else {
             Toast.makeText(this, "Flash not available on your device!", Toast.LENGTH_LONG).show();
@@ -49,30 +45,36 @@ public class TorchTileService extends TileService {
     }
 
     private void updateTile() {
-        SharedPreferences prefs = getSharedPreferences("tile_preferences", MODE_PRIVATE);
-        boolean isActive = prefs.getBoolean("tile_state", false);
+        boolean isActive = getPrefs().getBoolean("tile_state", false);
 
-        Tile tile = getQsTile();
         Icon newIcon;
         int newState;
 
         if (isActive) {
             newIcon = Icon.createWithResource(this, R.drawable.ic_torch_on);
             newState = Tile.STATE_ACTIVE;
+            setTile(newIcon, newState);
         } else {
             newIcon = Icon.createWithResource(this, R.drawable.ic_torch_off);
             newState = Tile.STATE_INACTIVE;
+            setTile(newIcon, newState);
         }
+    }
 
+    private void setTile(Icon icon, int state) {
+        Tile tile = getQsTile();
         tile.setLabel(getTileName());
-        tile.setIcon(newIcon);
-        tile.setState(newState);
+        tile.setIcon(icon);
+        tile.setState(state);
         tile.updateTile();
     }
 
     private String getTileName() {
-        SharedPreferences prefs = getSharedPreferences("tile_preferences", MODE_PRIVATE);
-        return prefs.getString("tile_name", "Flashlight");
+        return getPrefs().getString("tile_name", "Flashlight");
+    }
+
+    private SharedPreferences getPrefs() {
+        return getSharedPreferences("tile_preferences", MODE_PRIVATE);
     }
 
 }

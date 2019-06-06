@@ -1,6 +1,5 @@
 package com.umang96.flashlight;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +9,6 @@ import android.content.SharedPreferences;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.umang96.flashlight.widget.WidgetService;
 
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
@@ -39,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean hasCameraFlash = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
                 if (hasCameraFlash) {
-                    Intent intent = new Intent(getApplicationContext(), WidgetService.class);
-                    startService(intent);
+                    TorchUtils.toggleTorch(getApplicationContext());
                 } else {
                     Toast.makeText(getApplicationContext(), "Flash not available on your device!", Toast.LENGTH_LONG).show();
                 }

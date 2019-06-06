@@ -1,30 +1,29 @@
 package com.umang96.flashlight.widget;
 
-import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 
-import com.umang96.flashlight.TorchUtils;
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
 
-public class WidgetService extends IntentService {
-    private static int[] ids;
 
-    public WidgetService() {
-        super("WidgetService");
+public class WidgetService extends JobIntentService {
+    final static int job_id = 95;
+
+    public static void enqueueWork(Context context, Intent intent) {
+        enqueueWork(context, WidgetService.class, job_id, intent);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        ids = AppWidgetManager.getInstance(this).getAppWidgetIds(new ComponentName(this, TorchWidget.class));
-        TorchUtils.checkState(this);
-        updateWidgets();
-    }
-
-    private void updateWidgets() {
-        if (ids != null && ids.length > 0) {
-            for (int id : ids) {
-                TorchWidget.updateAppWidget(this, AppWidgetManager.getInstance(this), id);
+    protected void onHandleWork(@NonNull Intent intent) {
+        if (intent.getAction() != null) {
+            int[] ids = AppWidgetManager.getInstance(this).getAppWidgetIds(new ComponentName(this, TorchWidget.class));
+            if (ids != null && ids.length > 0) {
+                for (int id : ids) {
+                    TorchWidget.updateAppWidget(this, AppWidgetManager.getInstance(this), id);
+                }
             }
         }
     }
