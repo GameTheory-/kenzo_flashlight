@@ -26,4 +26,4 @@ For android 7+
 
 ## Other Projects
 
-- <https://intechgeek.com/>
+- <https://techstop.github.io/>
